@@ -139,6 +139,7 @@ const KEY_LEFT = 'KeyA';
 const KEY_RIGHT = 'KeyD';
 const KEY_UP = 'KeyW';
 const KEY_SPACE = 'Space';
+const KEY_TOGGLE_AIM = 'KeyM';
 
 // Mouse tracking for aim
 let mouseX = canvas.width / 2;
@@ -172,17 +173,18 @@ document.addEventListener('keydown', (e) => {
     switch (e.code) {
         case KEY_LEFT:
             keys.left = true;
-            controlMode = 'keyboard';
             break;
         case KEY_RIGHT:
             keys.right = true;
-            controlMode = 'keyboard';
             break;
         case KEY_UP:
             keys.up = true;
             break;
         case KEY_SPACE:
             keys.space = true;
+            break;
+        case KEY_TOGGLE_AIM:
+            controlMode = controlMode === 'keyboard' ? 'mouse' : 'keyboard';
             break;
     }
 });
@@ -209,7 +211,6 @@ canvas.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
     mouseX = e.clientX - rect.left;
     mouseY = e.clientY - rect.top;
-    controlMode = 'mouse';
     initAudio();
 });
 
@@ -918,7 +919,7 @@ function drawTitleScreen() {
     ctx.fillText('PRESS SPACE TO START', canvas.width / 2, canvas.height / 2 + 30);
     
     ctx.font = 'bold 14px Hyperspace, monospace';
-    ctx.fillText('MOUSE TO AIM, W TO THRUST, SPACE TO SHOOT', canvas.width / 2, canvas.height / 2 + 70);
+    ctx.fillText('W TO THRUST, SPACE TO SHOOT, M TO TOGGLE AIM', canvas.width / 2, canvas.height / 2 + 70);
     ctx.fillText('OR USE A/D TO ROTATE (KEYBOARD MODE)', canvas.width / 2, canvas.height / 2 + 95);
 }
 
