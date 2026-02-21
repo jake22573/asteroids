@@ -719,7 +719,7 @@ function drawScore() {
     
     // Draw high score
     ctx.font = 'bold 14px Hyperspace, monospace';
-    ctx.fillStyle = '#bbb';
+    ctx.fillStyle = '#fff';
     ctx.fillText(`HIGH: ${highScore}`, 20, 95);
 }
 
@@ -905,20 +905,24 @@ function drawTitleScreen() {
     ctx.fillStyle = '#fff';
     ctx.font = 'bold 36px Hyperspace, monospace';
     ctx.textAlign = 'center';
+    ctx.fontKerning = 'none';
     ctx.fillText('ASTEROIDS', canvas.width / 2, canvas.height / 2 - 50);
     
     // Show high score on title screen
     if (highScore > 0) {
         ctx.font = 'bold 16px Hyperspace, monospace';
         ctx.fillStyle = '#bbb';
+        ctx.fontKerning = 'none';
         ctx.fillText(`HIGH SCORE: ${highScore}`, canvas.width / 2, canvas.height / 2 - 10);
     }
     
     ctx.fillStyle = '#fff';
     ctx.font = 'bold 20px Hyperspace, monospace';
+    ctx.fontKerning = "none";
     ctx.fillText('PRESS SPACE TO START', canvas.width / 2, canvas.height / 2 + 30);
     
     ctx.font = 'bold 14px Hyperspace, monospace';
+    ctx.fontKerning = "none";
     ctx.fillText('W TO THRUST, SPACE TO SHOOT, M TO TOGGLE AIM', canvas.width / 2, canvas.height / 2 + 70);
     ctx.fillText('OR USE A/D TO ROTATE (KEYBOARD MODE)', canvas.width / 2, canvas.height / 2 + 95);
 }
@@ -979,7 +983,7 @@ function drawGameOverScreen() {
     drawGame();
     
     // Draw overlay
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    ctx.fillStyle = 'rgba(0, 0, 0, 1.0)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
     ctx.fillStyle = '#fff';
