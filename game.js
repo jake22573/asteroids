@@ -140,6 +140,7 @@ const KEY_RIGHT = 'KeyD';
 const KEY_UP = 'KeyW';
 const KEY_SPACE = 'Space';
 const KEY_TOGGLE_AIM = 'KeyM';
+const KEY_ESCAPE = 'Escape';
 
 // Mouse tracking for aim
 let mouseX = canvas.width / 2;
@@ -164,6 +165,15 @@ document.addEventListener('keydown', (e) => {
             return;
         } else if (gameState === STATE_GAMEOVER) {
             startGame();
+            e.preventDefault();
+            return;
+        }
+    }
+    
+    // Escape key returns to title screen
+    if (e.code === KEY_ESCAPE) {
+        if (gameState === STATE_PLAYING || gameState === STATE_GAMEOVER) {
+            gameState = STATE_TITLE;
             e.preventDefault();
             return;
         }
