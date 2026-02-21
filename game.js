@@ -144,7 +144,7 @@ const KEY_TOGGLE_AIM = 'KeyM';
 // Mouse tracking for aim
 let mouseX = canvas.width / 2;
 let mouseY = canvas.height / 2;
-let controlMode = 'keyboard';  // 'keyboard' or 'mouse'
+let controlMode = 'mouse';  // 'keyboard' or 'mouse'
 
 document.addEventListener('keydown', (e) => {
     // Initialize audio on first user interaction
