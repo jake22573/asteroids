@@ -1,3 +1,19 @@
+@font-face {
+    font-family: 'Hyperspace';
+    src: url('fonts/Hyperspace.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Hyperspace';
+    src: url('fonts/Hyperspace\ Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
 * {
     margin: 0;
     padding: 0;

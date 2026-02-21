@@ -149,6 +149,12 @@ document.addEventListener('keydown', (e) => {
     // Initialize audio on first user interaction
     initAudio();
     
+    // Ignore input during loading
+    if (gameState === STATE_LOADING) {
+        e.preventDefault();
+        return;
+    }
+    
     // Handle game state transitions
     if (e.code === KEY_SPACE) {
         if (gameState === STATE_TITLE) {
@@ -559,10 +565,21 @@ let invincibleTimer = 0;
 const INVINCIBLE_DURATION = 3.0;  // Seconds of invincibility after respawn
 
 // Game states
-const STATE_TITLE = 0;
-const STATE_PLAYING = 1;
-const STATE_GAMEOVER = 2;
-let gameState = STATE_TITLE;
+const STATE_LOADING = 0;
+const STATE_TITLE = 1;
+const STATE_PLAYING = 2;
+const STATE_GAMEOVER = 3;
+let gameState = STATE_LOADING;
+
+// Font loading
+let fontLoaded = false;
+
+function loadFont() {
+    document.fonts.load('bold 36px Hyperspace').then(() => {
+        fontLoaded = true;
+        gameState = STATE_TITLE;
+    });
+}
 
 // ============================================
 // HELPER FUNCTIONS
@@ -694,14 +711,14 @@ function checkCollisions() {
 
 function drawScore() {
     ctx.fillStyle = '#fff';
-    ctx.font = '24px monospace';
+    ctx.font = 'bold 20px Hyperspace, monospace';
     ctx.textAlign = 'left';
     ctx.fillText(`SCORE: ${score}`, 20, 40);
     ctx.fillText(`LEVEL: ${level}`, 20, 70);
     
     // Draw high score
-    ctx.font = '16px monospace';
-    ctx.fillStyle = '#888';
+    ctx.font = 'bold 14px Hyperspace, monospace';
+    ctx.fillStyle = '#bbb';
     ctx.fillText(`HIGH: ${highScore}`, 20, 95);
 }
 
@@ -863,7 +880,9 @@ function render() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Draw based on game state
-    if (gameState === STATE_TITLE) {
+    if (gameState === STATE_LOADING) {
+        drawLoadingScreen();
+    } else if (gameState === STATE_TITLE) {
         drawTitleScreen();
     } else if (gameState === STATE_PLAYING) {
         drawGame();
@@ -872,26 +891,35 @@ function render() {
     }
 }
 
+function drawLoadingScreen() {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 20px Hyperspace, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('LOADING...', canvas.width / 2, canvas.height / 2);
+}
+
 function drawTitleScreen() {
     ctx.fillStyle = '#fff';
-    ctx.font = '48px monospace';
+    ctx.font = 'bold 36px Hyperspace, monospace';
     ctx.textAlign = 'center';
     ctx.fillText('ASTEROIDS', canvas.width / 2, canvas.height / 2 - 50);
     
     // Show high score on title screen
     if (highScore > 0) {
-        ctx.font = '20px monospace';
-        ctx.fillStyle = '#888';
-        ctx.fillText(`High Score: ${highScore}`, canvas.width / 2, canvas.height / 2 - 10);
+        ctx.font = 'bold 16px Hyperspace, monospace';
+        ctx.fillStyle = '#bbb';
+        ctx.fillText(`HIGH SCORE: ${highScore}`, canvas.width / 2, canvas.height / 2 - 10);
     }
     
     ctx.fillStyle = '#fff';
-    ctx.font = '24px monospace';
-    ctx.fillText('Press SPACE to Start', canvas.width / 2, canvas.height / 2 + 30);
+    ctx.font = 'bold 20px Hyperspace, monospace';
+    ctx.fillText('PRESS SPACE TO START', canvas.width / 2, canvas.height / 2 + 30);
     
-    ctx.font = '16px monospace';
-    ctx.fillText('Mouse to aim, W to thrust, SPACE to shoot', canvas.width / 2, canvas.height / 2 + 70);
-    ctx.fillText('Or use A/D to rotate (keyboard mode)', canvas.width / 2, canvas.height / 2 + 95);
+    ctx.font = 'bold 14px Hyperspace, monospace';
+    ctx.fillText('MOUSE TO AIM, W TO THRUST, SPACE TO SHOOT', canvas.width / 2, canvas.height / 2 + 70);
+    ctx.fillText('OR USE A/D TO ROTATE (KEYBOARD MODE)', canvas.width / 2, canvas.height / 2 + 95);
 }
 
 function drawGame() {
@@ -954,25 +982,25 @@ function drawGameOverScreen() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
     ctx.fillStyle = '#fff';
-    ctx.font = '48px monospace';
+    ctx.font = 'bold 36px Hyperspace, monospace';
     ctx.textAlign = 'center';
     ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 50);
     
-    ctx.font = '24px monospace';
-    ctx.fillText(`Score: ${score}`, canvas.width / 2, canvas.height / 2);
+    ctx.font = 'bold 20px Hyperspace, monospace';
+    ctx.fillText(`SCORE: ${score}`, canvas.width / 2, canvas.height / 2);
     
     // Show high score (highlight if new record)
     if (score >= highScore && score > 0) {
         ctx.fillStyle = '#ff0';
         ctx.fillText('NEW HIGH SCORE!', canvas.width / 2, canvas.height / 2 + 35);
     } else {
-        ctx.fillStyle = '#888';
-        ctx.fillText(`High Score: ${highScore}`, canvas.width / 2, canvas.height / 2 + 35);
+        ctx.fillStyle = '#bbb';
+        ctx.fillText(`HIGH SCORE: ${highScore}`, canvas.width / 2, canvas.height / 2 + 35);
     }
     
     ctx.fillStyle = '#fff';
-    ctx.font = '20px monospace';
-    ctx.fillText('Press SPACE to Restart', canvas.width / 2, canvas.height / 2 + 75);
+    ctx.font = 'bold 16px Hyperspace, monospace';
+    ctx.fillText('PRESS SPACE TO RESTART', canvas.width / 2, canvas.height / 2 + 75);
 }
 
 function gameLoop(currentTime) {
@@ -995,4 +1023,8 @@ function gameLoop(currentTime) {
 // START GAME
 // ============================================
 
+// Load font before starting game
+loadFont();
+
+// Start game loop
 requestAnimationFrame(gameLoop);
