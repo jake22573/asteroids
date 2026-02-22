@@ -176,6 +176,7 @@ document.addEventListener('keydown', (e) => {
     if (e.code === KEY_ESCAPE) {
         if (gameState === STATE_PLAYING || gameState === STATE_GAMEOVER) {
             gameState = STATE_TITLE;
+            spawnTitleAsteroids();
             e.preventDefault();
             return;
         }
@@ -547,6 +548,9 @@ const ship = new Ship(canvas.width / 2, canvas.height / 2);
 // Asteroids array
 const asteroids = [];
 
+// Title screen asteroids
+const titleAsteroids = [];
+
 // Bullets array
 const bullets = [];
 
@@ -595,6 +599,7 @@ function loadFont() {
     document.fonts.load('bold 36px Hyperspace').then(() => {
         fontLoaded = true;
         gameState = STATE_TITLE;
+        spawnTitleAsteroids();
     });
 }
 
@@ -628,6 +633,16 @@ function spawnAsteroids(count, size) {
         }
         
         asteroids.push(new Asteroid(x, y, size));
+    }
+}
+
+function spawnTitleAsteroids() {
+    titleAsteroids.length = 0;
+    const count = 6;
+    for (let i = 0; i < count; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        titleAsteroids.push(new Asteroid(x, y, 60));
     }
 }
 
@@ -833,6 +848,11 @@ function update(dt) {
         gameOverTimer -= dt;
     }
     
+    // Update title screen asteroids
+    for (const asteroid of titleAsteroids) {
+        asteroid.update(dt);
+    }
+    
     // Only update game logic when playing
     if (gameState !== STATE_PLAYING) {
         return;
@@ -925,6 +945,11 @@ function drawLoadingScreen() {
 }
 
 function drawTitleScreen() {
+    // Draw title asteroids in background
+    for (const asteroid of titleAsteroids) {
+        asteroid.draw();
+    }
+    
     ctx.fillStyle = '#fff';
     ctx.font = 'bold 36px Hyperspace, monospace';
     ctx.textAlign = 'center';
