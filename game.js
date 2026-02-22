@@ -591,7 +591,7 @@ const INVINCIBLE_DURATION = 3.0;  // Seconds of invincibility after respawn
 
 // Game over delay
 let gameOverTimer = 0;
-const GAME_OVER_DELAY = 3.0;  // Seconds before restart is allowed
+const GAME_OVER_DELAY = 2.0;  // Seconds before restart is allowed
 
 // Game states
 const STATE_LOADING = 0;
