@@ -182,6 +182,14 @@ document.addEventListener('keydown', (e) => {
         }
     }
     
+    // $ key resets all stats (high score) - only on title screen
+    if (e.key === '$' && gameState === STATE_TITLE) {
+        highScore = 0;
+        localStorage.removeItem('asteroidsHighScore');
+        e.preventDefault();
+        return;
+    }
+    
     // Normal key handling
     switch (e.code) {
         case KEY_LEFT:
@@ -742,13 +750,19 @@ function checkCollisions() {
 }
 
 function drawScore() {
-    ctx.fillStyle = '#fff';
     ctx.font = 'bold 20px Hyperspace, monospace';
     ctx.textAlign = 'left';
+    
+    if (score >= highScore && score > 0) {
+        ctx.fillStyle = '#ff0';
+    } else {
+        ctx.fillStyle = '#fff';
+    }
     ctx.fillText(`SCORE: ${score}`, 20, 40);
+    
+    ctx.fillStyle = '#fff';
     ctx.fillText(`LEVEL: ${level}`, 20, 70);
     
-    // Draw high score
     ctx.font = 'bold 16px Hyperspace, monospace';
     ctx.fillStyle = '#fff';
     ctx.fillText(`HIGH: ${highScore}`, 20, 95);
