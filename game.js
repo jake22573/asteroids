@@ -257,7 +257,7 @@ class Ship {
         this.rotationSpeed = 5;      // Radians per second
         this.thrustPower = 300;      // Pixels per second squared
         this.thrusting = false;      // Is thrust currently active?
-        this.friction = 0.99;       // Velocity multiplier per frame at 60fps (drag)
+        this.friction = 0.995;       // Velocity multiplier per frame at 60fps (drag)
     }
 
     update(dt) {
