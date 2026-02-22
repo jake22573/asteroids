@@ -164,7 +164,9 @@ document.addEventListener('keydown', (e) => {
             e.preventDefault();
             return;
         } else if (gameState === STATE_GAMEOVER) {
-            startGame();
+            if (gameOverTimer <= 0) {
+                startGame();
+            }
             e.preventDefault();
             return;
         }
@@ -575,6 +577,10 @@ let invincible = false;
 let invincibleTimer = 0;
 const INVINCIBLE_DURATION = 3.0;  // Seconds of invincibility after respawn
 
+// Game over delay
+let gameOverTimer = 0;
+const GAME_OVER_DELAY = 3.0;  // Seconds before restart is allowed
+
 // Game states
 const STATE_LOADING = 0;
 const STATE_TITLE = 1;
@@ -728,7 +734,7 @@ function drawScore() {
     ctx.fillText(`LEVEL: ${level}`, 20, 70);
     
     // Draw high score
-    ctx.font = 'bold 14px Hyperspace, monospace';
+    ctx.font = 'bold 16px Hyperspace, monospace';
     ctx.fillStyle = '#fff';
     ctx.fillText(`HIGH: ${highScore}`, 20, 95);
 }
@@ -779,6 +785,7 @@ function startGame() {
     lives = MAX_LIVES;
     invincible = false;
     invincibleTimer = 0;
+    gameOverTimer = 0;
     
     // Clear arrays
     asteroids.length = 0;
@@ -806,6 +813,7 @@ function nextLevel() {
 
 function gameOver() {
     gameState = STATE_GAMEOVER;
+    gameOverTimer = GAME_OVER_DELAY;
     playGameOverSound();
     
     // Check for new high score
@@ -820,6 +828,11 @@ function gameOver() {
 // ============================================
 
 function update(dt) {
+    // Update game over timer
+    if (gameOverTimer > 0) {
+        gameOverTimer -= dt;
+    }
+    
     // Only update game logic when playing
     if (gameState !== STATE_PLAYING) {
         return;
@@ -931,10 +944,12 @@ function drawTitleScreen() {
     ctx.fontKerning = "none";
     ctx.fillText('PRESS SPACE TO START', canvas.width / 2, canvas.height / 2 + 30);
     
-    ctx.font = 'bold 14px Hyperspace, monospace';
+    ctx.font = 'bold 16px Hyperspace, monospace';
     ctx.fontKerning = "none";
-    ctx.fillText('W TO THRUST, SPACE TO SHOOT, M TO TOGGLE AIM', canvas.width / 2, canvas.height / 2 + 70);
-    ctx.fillText('OR USE A/D TO ROTATE (KEYBOARD MODE)', canvas.width / 2, canvas.height / 2 + 95);
+    ctx.fillText('W TO THRUST, SPACE TO SHOOT', canvas.width / 2, canvas.height / 2 + 70);
+    ctx.fillText('M TO TOGGLE AIM MODE', canvas.width / 2, canvas.height / 2 + 95);
+    ctx.fillText('AIM WITH MOUSE OR A/D KEYS', canvas.width / 2, canvas.height / 2 + 120);
+
 }
 
 function drawGame() {
